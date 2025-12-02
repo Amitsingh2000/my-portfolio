@@ -42,7 +42,7 @@ const Certifications = () => {
                 </div>
               </div>
 
-              <div className="p-6">
+              <div className="p-8">
                 <div className="flex items-center mb-4">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                   <span className="text-green-600 font-medium">Completed</span>

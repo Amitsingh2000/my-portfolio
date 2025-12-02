@@ -8,7 +8,7 @@ const Skills = () => {
       icon: <Code className="h-6 w-6" />,
       skills: [
         { name: "Java", level: 90 },
-        { name: "JavaScript", level: 70 }
+        { name: "SQL", level: 70 }
       ]
     },
     {
@@ -16,8 +16,7 @@ const Skills = () => {
       icon: <Database className="h-6 w-6" />,
       skills: [
         { name: "MySQL", level: 85 },
-        { name: "MongoDB", level: 80 },
-        { name: "Oracle", level: 75 }
+        { name: "MongoDB", level: 70 },
       ]
     },
     {
@@ -26,8 +25,7 @@ const Skills = () => {
       skills: [
         { name: "Spring Boot", level: 85 },
         { name: "Hibernate", level: 80 },
-        { name: "ReactJS", level: 75 },
-        { name: "Bootstrap", level: 80 }
+        { name: "ReactJS", level: 70 },
       ]
     },
     {
@@ -36,7 +34,6 @@ const Skills = () => {
       skills: [
         { name: "Eclipse", level: 85 },
         { name: "Git", level: 80 },
-        { name: "VS Code", level: 85 },
         { name: "Postman", level: 80 }
       ]
     }
@@ -45,7 +42,7 @@ const Skills = () => {
   return (
     <section id="skills" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Technical Skills
           </h2>

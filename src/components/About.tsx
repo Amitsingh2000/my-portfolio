@@ -23,7 +23,7 @@ const About = () => {
   return (
     <section id="about" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             About Me
           </h2>
@@ -46,7 +46,7 @@ const About = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Current Status</h3>
               <p className="text-gray-700 leading-relaxed">
                 Successfully completed Master of Computer Application at D.Y. Patil Centre
-                for Management and Research, Pune with <strong>CGPA: 7.91 (First Class with Distinction)</strong>.
+                for Management and Research, Pune with <strong>CGPA: 7.91</strong>.
                 Passionate about full-stack development with expertise in Java, Spring Boot, and modern web technologies.
                 Currently seeking exciting opportunities to kick-start my career in the software development industry.
               </p>
