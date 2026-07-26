@@ -1,94 +1,118 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+
+const navItems = [
+  { name: 'About', id: 'about' },
+  { name: 'Experience', id: 'experience' },
+  { name: 'Skills', id: 'skills' },
+  { name: 'Projects', id: 'projects' },
+  { name: 'Education', id: 'education' },
+  { name: 'Contact', id: 'contact' },
+];
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      const current = navItems
+        .map(i => document.getElementById(i.id))
+        .findLast(s => s && window.scrollY >= s.offsetTop - 130);
+      if (current) setActiveSection(current.id);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
-    }
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
   };
 
-  const navItems = [
-    { name: 'About', id: 'about' },
-    { name: 'Education', id: 'education' },
-    { name: 'Skills', id: 'skills' },
-    { name: 'Projects', id: 'projects' },
-    { name: 'Certifications', id: 'certifications' },
-    { name: 'Contact', id: 'contact' },
-  ];
-
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <div className="flex items-center space-x-2">
-            <Code className="h-8 w-8 text-blue-600" />
-            <span className={`text-xl font-bold ${
-              isScrolled ? 'text-gray-900' : 'text-white'
-            }`}>
-              Amit Pardeshi
-            </span>
-          </div>
+    <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+      <div className="header__inner">
+        {/* Logo */}
+        <button
+          className="header__logo"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+        >
+          <span className="header__logo-mark">ap/</span>
+          <span className="header__logo-name">Amit Pardeshi</span>
+        </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                  isScrolled ? 'text-gray-700' : 'text-white hover:text-blue-200'
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
-          </nav>
+        {/* Desktop nav */}
+        <nav className="header__nav" aria-label="Main navigation">
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              className={`header__nav-btn ${activeSection === item.id ? 'header__nav-btn--active' : ''}`}
+              onClick={() => scrollTo(item.id)}
+            >
+              {item.name}
+            </button>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button */}
+        {/* Desktop CTA */}
+        <a
+          href="https://drive.google.com/file/d/17H_B2-q460szHao0_MNQ4LwUetopYuyd/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="header__cta"
+          aria-label="Download resume"
+        >
+          Resume ↗
+        </a>
+
+        {/* Mobile hamburger */}
+        <button
+          className="header__mobile-btn"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+        >
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
+      {/* Mobile drawer */}
+      <div
+        className={`header__mobile-menu ${isOpen ? 'header__mobile-menu--open' : ''}`}
+        role="navigation"
+        aria-label="Mobile navigation"
+      >
+        {navItems.map(item => (
           <button
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
+            key={item.id}
+            className="header__mobile-nav-btn"
+            onClick={() => scrollTo(item.id)}
           >
-            {isOpen ? (
-              <X className={`h-6 w-6 ${isScrolled ? 'text-gray-900' : 'text-white'}`} />
-            ) : (
-              <Menu className={`h-6 w-6 ${isScrolled ? 'text-gray-900' : 'text-white'}`} />
-            )}
+            {item.name}
           </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 w-full text-left"
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        ))}
+        <a
+          href="https://drive.google.com/file/d/17H_B2-q460szHao0_MNQ4LwUetopYuyd/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            margin: '4px 0 2px',
+            padding: '11px 16px',
+            borderRadius: '7px',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            color: '#fff',
+            textAlign: 'center',
+            fontWeight: 600,
+            fontSize: '0.88rem',
+          }}
+        >
+          Download Resume ↗
+        </a>
       </div>
     </header>
   );

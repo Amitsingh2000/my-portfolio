@@ -1,61 +1,121 @@
-import React from 'react';
-import { ChevronDown, Download } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowDown, Github, Linkedin, Mail, Download } from 'lucide-react';
+
+const roles = [
+  'Full Stack Java Developer',
+  'Spring Boot Engineer',
+  'React.js Developer',
+  'REST API Specialist',
+];
 
 const Hero = () => {
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const ref = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    const current = roles[roleIndex];
+    if (!deleting && displayed.length < current.length) {
+      ref.current = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 65);
+    } else if (!deleting && displayed.length === current.length) {
+      ref.current = setTimeout(() => setDeleting(true), 2000);
+    } else if (deleting && displayed.length > 0) {
+      ref.current = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35);
+    } else if (deleting && displayed.length === 0) {
+      setDeleting(false);
+      setRoleIndex(i => (i + 1) % roles.length);
     }
-  };
+    return () => clearTimeout(ref.current);
+  }, [displayed, deleting, roleIndex]);
+
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
-      <div className="absolute inset-0 bg-black opacity-20"></div>
+    <section id="hero" className="hero">
+      {/* Decorative backgrounds */}
+      <div className="hero__bg-grid" aria-hidden="true" />
+      <div className="hero__bg-glow" aria-hidden="true" />
+      <div className="hero__orb hero__orb--1 animate-float" aria-hidden="true" />
+      <div className="hero__orb hero__orb--2 animate-float delay-300" aria-hidden="true" />
 
-      <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
-            Hi, I'm <span className="text-blue-200">Amit Pardeshi</span>
-          </h1>
+      <div className="hero__content">
+        {/* Available badge */}
+        <div className="hero__badge animate-fade-up" role="status">
+          <span className="hero__badge-dot animate-pulse-ring" />
+          <span className="hero__badge-text">Available for freelance projects</span>
+        </div>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-light mb-8 text-blue-100">
-            Full Stack Java Developer
-          </h2>
+        {/* Name */}
+        <h1 className="hero__name animate-fade-up delay-100">
+          Amit Pardeshi
+        </h1>
 
-          <p className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
-            To leverage my technical expertise and problem-solving skills to deliver
-            innovative and efficient software solutions while contributing to the success
-            of the organization.
-          </p>
+        {/* Typewriter */}
+        <div className="hero__role animate-fade-up delay-200" aria-live="polite">
+          <span>{displayed}</span>
+          <span className="hero__cursor animate-blink">&nbsp;</span>
+        </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button
-              onClick={scrollToAbout}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              Learn More
-            </button>
+        {/* Bio */}
+        <p className="hero__bio animate-fade-up delay-300">
+          I build scalable web apps with{' '}
+          <span style={{ color: '#a5b4fc' }}>Java, Spring Boot &amp; React.js</span>.
+          Currently an Implementation Intern at{' '}
+          <span style={{ color: '#a5b4fc' }}>Netwin Systems</span>, deploying enterprise banking software.
+        </p>
 
+        {/* CTA buttons */}
+        <div className="hero__cta-row animate-fade-up delay-400">
+          <button
+            className="hero__btn-primary"
+            onClick={() => scrollTo('projects')}
+            aria-label="View my projects"
+          >
+            View Projects
+          </button>
+          <a
+            href="https://drive.google.com/file/d/17H_B2-q460szHao0_MNQ4LwUetopYuyd/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero__btn-secondary"
+            aria-label="Download CV"
+          >
+            <Download size={15} aria-hidden="true" />
+            Download CV
+          </a>
+        </div>
+
+        {/* Social links */}
+        <div className="hero__socials animate-fade-up delay-500">
+          {[
+            { icon: <Github size={18} aria-hidden="true" />, href: 'https://github.com/Amitsingh2000', label: 'GitHub' },
+            { icon: <Linkedin size={18} aria-hidden="true" />, href: 'https://www.linkedin.com/in/amit-pardeshi26/', label: 'LinkedIn' },
+            { icon: <Mail size={18} aria-hidden="true" />, href: 'mailto:amit.pardeshi2000@gmail.com', label: 'Email' },
+          ].map(s => (
             <a
-              href="https://drive.google.com/file/d/17H_B2-q460szHao0_MNQ4LwUetopYuyd/view?usp=sharing"
-              target="_blank"
+              key={s.label}
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 border-2 border-white text-white hover:bg-white hover:text-blue-700 px-8 py-3 rounded-lg font-semibold transition-all duration-300"
+              className="hero__social-link"
+              aria-label={s.label}
+              title={s.label}
             >
-              <Download className="h-4 w-4" />
-              <span>Download CV</span>
+              {s.icon}
             </a>
-          </div>
-
+          ))}
         </div>
       </div>
 
+      {/* Scroll hint */}
       <button
-        onClick={scrollToAbout}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce"
+        className="hero__scroll-hint animate-float"
+        onClick={() => scrollTo('about')}
+        aria-label="Scroll down"
       >
-        <ChevronDown className="h-8 w-8" />
+        <span>scroll</span>
+        <ArrowDown size={16} aria-hidden="true" />
       </button>
     </section>
   );
